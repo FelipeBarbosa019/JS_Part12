@@ -8,14 +8,15 @@ function factorial (x){
 }
 
 /* Function that calculates the Euler number considering 1000 interactions*/
-let resultEuler = euler (1000)
-console.log(resultEuler)
+euler (1000)
+
 
 function euler (x){
     let y = 1
     for (let i = 1; i <= x; i++) {
         y = y + (1/(factorial(i)))
     }
+    console.log(`Euler: ${y}`)
     return y
 }
 
@@ -42,8 +43,8 @@ function prime(num){
 
 /* Function that calculates the value of the PI number, 
 using the Nilakantha series, with a precision of 100 places after the decimal point. */
-let resultPi = pi();
-console.log(resultPi)
+pi();
+
 
 function pi() {
     let x=3
@@ -53,8 +54,8 @@ function pi() {
         y = ( 4 / ( i*(i+1)*(i+2) ) )
         x = x + y*Math.pow(-1, j)
         j++
-        console.log(x.toFixed(100))
     }
+    console.log(`π: ${x.toFixed(100)}`)
     return x
 }
 
@@ -82,23 +83,25 @@ let cards = [
 
 play.addEventListener ("click", shuffle)
 
-
 function shuffle(){
     let  randomNumber = parseInt(getRandomArbitrary (0, cards.length))
     let drawCards = cards.splice(randomNumber, 1)
     showCards(drawCards);
-    console.log(drawCards)
 }
 
 function getRandomArbitrary(min, max) {
     return Math.random() * (max - min) + min;
 }
 
+function order (){
+    handNumber.sort(function (a, b) {
+      return a - b
+    });
+}
 
 function showCards(x){
     if(cont<=5){
         let show = document.querySelector ("#card" + cont)
-        console.log(show)
 
         // SPADES:
         if(x=="A♠"){
@@ -527,39 +530,92 @@ function showCards(x){
     else {
         let textReturn = document.querySelector("h1")
         order();
-        textReturn.textContent= "Você fez um X"
-        console.log(handNumber)
-        console.log(handSuit)
-    }
 
-        //Result
+        //Results
 
-        // Straight Flush: são cinco cartas em sequência e do mesmo naipe;
-        // if(handNumber[1] == (handNumber[0] + 1) && handNumber[2] == (handNumber[1] + 1) && handNumber[3] == (handNumber[2] + 1) && handNumber[4] == (handNumber[3] + 1)){
-        //     textReturn.textContent= "Congratulations!! You made a straight flush"
-        // }
-
-        // Quadra: quatro cartas do mesmo valor;
-        // else if(handNumber)
-
-        // Full House: três cartas do mesmo valor e um par de cartas de mesmo valor;
-
-        // Sequência: as cinco cartas têm a mesma sequência numérica;
-        if(handNumber[1] == (handNumber[0] + 1) && handNumber[2] == (handNumber[1] + 1) && handNumber[3] == (handNumber[2] + 1) && handNumber[4] == (handNumber[3] + 1)){
-            textReturn.textContent= "Congratulations!! You made a straight flush"
+        // Straight Flush:
+        if(handNumber[1] == (handNumber[0] + 1) 
+        && handNumber[2] == (handNumber[1] + 1) 
+        && handNumber[3] == (handNumber[2] + 1) 
+        && handNumber[4] == (handNumber[3] + 1)){
+            if(handSuit[0]==handSuit[1] 
+            && handSuit[1]==handSuit[2] 
+            && handSuit[2]==handSuit[3] 
+            && handSuit[3]==handSuit[4]){
+                textReturn.textContent= "You made a Straight Flush"
+            }
+            else {
+                textReturn.textContent= "You made a Sequence"
+            }
         }
 
-        // Trinca: três cartas de mesmo valor;
+        // Four of a kind:
+        else if((handNumber[0] == handNumber[1] 
+            && handNumber[1] == handNumber[2] 
+            && handNumber[2] == handNumber[3]) 
+            || (handNumber[1] == handNumber[2] 
+            && handNumber[2] == handNumber[3] 
+            && handNumber[3] == handNumber[4])){
+            textReturn.textContent= "You made a Four of a kind"
+        }
 
-        // Dois pares: dois pares de cartas, sendo um par de um valor e outro par de outro valor;
+        // Full House:
+            else if( ( (handNumber[0] == handNumber[1] 
+                && handNumber[1] == handNumber[2])  
+                && (handNumber[3]==handNumber[4]) )
+                || 
+                ( (handNumber[2] == handNumber[3] 
+                && handNumber[3] == handNumber[4])  
+                && (handNumber[0]==handNumber[1]) ) ){
 
-        // Par: duas cartas de mesmo valor;
-        
-        // Nada: não fez nada.
-}
+                    textReturn.textContent= "You made a Full House"
 
-function order (){
-    handNumber.sort(function (a, b) {
-      return a - b
-    });
+            }  
+
+        // Three of a kind:
+          else if( (handNumber[0] == handNumber[1] 
+            && handNumber[1] == handNumber[2]) 
+            || (handNumber[1] == handNumber[2] 
+            && handNumber[2] == handNumber[3]) 
+            || (handNumber[2] == handNumber[3] 
+            && handNumber[3] == handNumber[4]) ){
+                textReturn.textContent= "You made a Three of a kind"
+        }
+
+        // Two pairs:
+        else if ( (handNumber[0] == handNumber[1]) && (handNumber[2] == handNumber[3])
+        ||
+        (handNumber[0] == handNumber[1]) && (handNumber[3] == handNumber[4])
+        ||
+        (handNumber[1] == handNumber[2]) && (handNumber[3] == handNumber[4]) ){
+            textReturn.textContent= "You made a Two Pairs"
+        }
+
+        // Pair:
+        else if ( handNumber[0] == handNumber[1]
+        ||
+        handNumber[0] == handNumber[2]
+        ||
+        handNumber[0] == handNumber[3]
+        ||
+        handNumber[0] == handNumber[4]
+        ||
+        handNumber[1] == handNumber[2]
+        ||
+        handNumber[1] == handNumber[3]
+        ||
+        handNumber[1] == handNumber[4]
+        ||
+        handNumber[2] == handNumber[3]
+        ||
+        handNumber[2] == handNumber[4]
+        ||
+        handNumber[3] == handNumber[4] ) {
+            textReturn.textContent= "You made a One Pair"
+        }
+        // Nothing
+        else {
+            textReturn.textContent= "You did not do anything"
+        }
+    }
 }
